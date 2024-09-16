@@ -19,6 +19,13 @@ dd {
   margin: 0;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  width: 100%;
+}
+
 /* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
 ul[role='list'],
 ol[role='list'] {
@@ -75,14 +82,14 @@ body {
 }
 
 h1 {
-  margin-bottom: 0.7em;
+  margin-bottom: 1.2em;
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
 
 .line {
   border-bottom: 1px solid;
-  margin-top: 1.35em;
+  margin-top: 0.4em;
 }
 
 .flame {
@@ -94,4 +101,5 @@ h1 {
 .logo-and-title {
   display: flex;
   margin-bottom: 2.7em;
+  width: 100%;
 }
