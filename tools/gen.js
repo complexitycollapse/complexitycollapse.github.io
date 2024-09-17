@@ -24,19 +24,32 @@ notesFiles.forEach(filename => {
     fs.mkdirSync(dirName);
   }
 
-  const revisionHashes = fs.readdirSync(dirName).map(f => getHash(fs.readFileSync(path.join(dirName, f), "utf8")));
+  const revisionFilenames = fs.readdirSync(dirName).sort();
+  const revisions = revisionFilenames.map(f => fs.readFileSync(path.join(dirName, f), "utf8"));
+  const previousRevisionFilename = revisionFilenames[revisionFilenames.length - 1];
+  const previousRevision = revisions[revisions.length - 1];
 
-  if (!revisionHashes.includes(hash)) {
-    console.log("New revision found for " + filename);
-    const revisionName = path.join(dirName, (new Date()).toISOString().replaceAll(":", "-") + ".md");
-    console.log(revisionName);
-    fs.writeFileSync(revisionName, note, { flush: true });
-
-    const body = converter.makeHtml(note);
-    const dom = new JSDOM(body);
-    const title = dom.window.document.getElementsByTagName("h1")[0].textContent;
-
-    const html = template.replace("{title}", title).replace("{body}", body);
-    fs.writeFileSync(path.join("node", filenameWithoutExtension + ".html"), html);
+  if (getHash(previousRevision) === hash) {
+    return;
   }
+
+  // Create new revision
+  console.log("New revision found for " + filename);
+  const revisionName = path.join(dirName, (new Date()).toISOString().replaceAll(":", "_") + ".md");
+  fs.writeFileSync(revisionName, note, { flush: true });
+
+  // Make HTML
+  const body = converter.makeHtml(note);
+  const dom = new JSDOM(body);
+  const oldDom = new JSDOM(fs.readFileSync(path.join("node", previousRevisionFilename + ".html"), "utf8"));
+  const title = dom.window.document.getElementsByTagName("h1")[0].textContent;
+  const html = template.replace("{title}", title).replace("{body}", body);
+
+  // Two-way links
+  const newLinks = dom.window.document.getElementsByTagName("a").filter(l => l.href.startsWith("/node/"));
+  const oldLinks = oldDom.window.document.getElementsByTagName("a").filter(l => l.href.startsWith("/node/"));
+  const addedLinks = newLinks.filter(l => !oldLinks.find(l2 => l2.href === l.href));
+  console.log(newLinks);
+
+  fs.writeFileSync(path.join("node", filenameWithoutExtension + ".html"), html);
 });
