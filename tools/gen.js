@@ -41,7 +41,6 @@ notesFiles.forEach(filename => {
     nodeDirs.push(filenameWithoutExtension);
   }
 
-  let generateRevision = false;
   const revisionFilenames = fs.readdirSync(dirName).sort();
   let previousRevision = undefined;
 
@@ -50,12 +49,10 @@ notesFiles.forEach(filename => {
     if (getHash(previousRevision) === hash) {
       return;
     }
-
-    generateRevision = true;
   }
 
   // Create new revision
-  if (generateRevision) {
+  if (!regenAll) {
     console.log("New revision found for " + filename);
     const revisionName = path.join(dirName, (new Date()).toISOString().replaceAll(":", "_") + ".md");
     fs.writeFileSync(revisionName, note, { flush: true });
