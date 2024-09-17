@@ -8,8 +8,11 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "type": "module",
   "description": "This is my homepage",
-  "dev-dependencies": {
-    "http-server": "^14.1.1"
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "showdown": "^2.1.0",
+    "jsdom": "^25.0.0"
   }
 }
