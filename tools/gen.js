@@ -4,6 +4,13 @@ import path from 'path';
 import { createHash } from 'crypto';
 import { JSDOM } from 'jsdom';
 
+let regenAll = false;
+
+if (process.argv.includes("--regen")) {
+  regenAll = true;
+  console.log("Regenerating all HTML");
+}
+
 function getHash(note) {
   return createHash('sha256').update(note).digest('hex');
 }
@@ -34,20 +41,25 @@ notesFiles.forEach(filename => {
     nodeDirs.push(filenameWithoutExtension);
   }
 
+  let generateRevision = false;
   const revisionFilenames = fs.readdirSync(dirName).sort();
   let previousRevision = undefined;
 
-  if (revisionFilenames.length > 0) {
+  if (!regenAll && revisionFilenames.length > 0) {
     previousRevision = fs.readFileSync(path.join(dirName, revisionFilenames[revisionFilenames.length - 1]), "utf8");
     if (getHash(previousRevision) === hash) {
       return;
     }
+
+    generateRevision = true;
   }
 
   // Create new revision
-  console.log("New revision found for " + filename);
-  const revisionName = path.join(dirName, (new Date()).toISOString().replaceAll(":", "_") + ".md");
-  fs.writeFileSync(revisionName, note, { flush: true });
+  if (generateRevision) {
+    console.log("New revision found for " + filename);
+    const revisionName = path.join(dirName, (new Date()).toISOString().replaceAll(":", "_") + ".md");
+    fs.writeFileSync(revisionName, note, { flush: true });
+  }
 
   // Make HTML
   const body = converter.makeHtml(note);
