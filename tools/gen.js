@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { createHash } from 'crypto';
 import { JSDOM } from 'jsdom';
+import * as paths from './gen-paths.js';
 
 let regenAll = false;
 
@@ -71,6 +72,10 @@ notesFiles.forEach(filename => {
     [{ title, homeHref: "/" + htmlFilename.replaceAll("\\", "/") }].concat(outgoingLinks.map(l => l.href))));
 });
 
+// Handle reverse linking and paths
+
+paths.loadPaths();
+
 const allLinks = new Map();
 const titles = new Map();
 
@@ -92,8 +97,8 @@ nodeDirs.map(d => {
   incoming.sort();
 
   const dom = new JSDOM(fs.readFileSync(htmlFilename, "utf8")).window.document;
-  const incomingNode = dom.getElementsByClassName("incoming-links-list")[0];
 
+  const incomingNode = dom.getElementsByClassName("incoming-links-list")[0];
   incomingNode.innerHTML = "";
 
   incoming.forEach(linkHref => {
@@ -104,6 +109,15 @@ nodeDirs.map(d => {
     }
     incomingNode.appendChild(child);
   });
+
+  const previousPathsNode = dom.getElementsByClassName("previous-paths-list")[0];
+  previousPathsNode.innerHTML = "";
+  const nextPathsNode = dom.getElementsByClassName("next-paths-list")[0];
+  nextPathsNode.innerHTML = "";
+
+  const { next, previous } = paths.getPathsForNode(dom, titles, d);
+  previous.forEach(el => previousPathsNode.appendChild(el));
+  next.forEach(el => nextPathsNode.appendChild(el));
 
   fs.writeFileSync(htmlFilename, "<!DOCTYPE html>\n" + dom.documentElement.outerHTML);
 });
