@@ -101,7 +101,6 @@ export function generatePaths(regenAll, titles) {
       const href = "/node/" + name + ".html";      
       return `<li><a href="${href}">${titles.get(href)}</a></li>\n`;
     }).join("");
-    console.log(body);
 
     const data = template.replaceAll("{title}", path.humanReadableName).replaceAll("{description}", path.description).replaceAll("{body}", body);
     fs.writeFileSync(join("path", path.name + ".html"), data);
