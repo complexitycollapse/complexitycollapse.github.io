@@ -43,6 +43,7 @@ export function loadPaths() {
     const lines = getLines(contents);
     const path = {
       name,
+      href: "/node/" + name + ".html",
       humanReadableName: lines.shift(),
       description: lines.shift(),
       nodes: lines
@@ -87,4 +88,22 @@ function createPathElement(dom, titles, path, index) {
 
 function getLines(contents) {
   return contents.replaceAll("\r", "").split("\n").map(line => line.trim()).filter(line => line.length > 0);
+}
+
+export function generatePaths(regenAll, titles) {
+  const pathsToGenerate = regenAll ? [...paths.keys()] : pathsToGenerate;
+  const template = fs.readFileSync("path-template.html", "utf8");
+
+  pathsToGenerate.forEach(pathName => {
+    const path = paths.get(pathName);
+
+    const body = path.nodes.map(name => {
+      const href = "/node/" + name + ".html";      
+      return `<li><a href="${href}">${titles.get(href)}</a></li>\n`;
+    }).join("");
+    console.log(body);
+
+    const data = template.replaceAll("{title}", path.humanReadableName).replaceAll("{description}", path.description).replaceAll("{body}", body);
+    fs.writeFileSync(join("path", path.name + ".html"), data);
+  });
 }

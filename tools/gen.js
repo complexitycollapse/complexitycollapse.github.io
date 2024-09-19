@@ -121,3 +121,5 @@ nodeDirs.map(d => {
 
   fs.writeFileSync(htmlFilename, "<!DOCTYPE html>\n" + dom.documentElement.outerHTML);
 });
+
+paths.generatePaths(regenAll, titles);
