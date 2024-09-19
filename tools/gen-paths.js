@@ -91,7 +91,7 @@ function getLines(contents) {
 }
 
 export function generatePaths(regenAll, titles) {
-  const pathsToGenerate = regenAll ? [...paths.keys()] : pathsToGenerate;
+  const pathsToGenerate = regenAll ? [...paths.keys()] : requireUpdate;
   const template = fs.readFileSync("path-template.html", "utf8");
 
   pathsToGenerate.forEach(pathName => {
