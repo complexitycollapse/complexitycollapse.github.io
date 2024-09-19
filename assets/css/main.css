@@ -75,10 +75,14 @@ select {
 body {
   color: black;
   background-color: antiquewhite;
-  max-width: 50em;
-  margin: 0 auto;
+  margin: 0;
   padding-top: 2em;
   font-family: sans-serif;
+}
+
+article {
+  max-width: 50em;
+  width: 100%;
 }
 
 p {
@@ -91,4 +95,11 @@ a:link {
 
 a:visited {
   color: #D282A6
+}
+
+.row {
+  display: flex;
+  margin: 0 auto;
+  justify-content: center;
+  gap: 0 5em;
 }

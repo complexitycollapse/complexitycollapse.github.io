@@ -38,6 +38,7 @@ h1 {
   display: flex;
   margin-bottom: 2.7em;
   width: 100%;
+  justify-content: left;
 }
 
 .title {
