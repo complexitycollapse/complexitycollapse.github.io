@@ -98,6 +98,11 @@ nodeDirs.map(d => {
 
   const dom = new JSDOM(fs.readFileSync(htmlFilename, "utf8")).window.document;
 
+  if (incoming.length === 0) {
+    const container = dom.getElementsByClassName("incoming")[0];
+    container.classList.add("hidden");
+  }
+
   const incomingNode = dom.getElementsByClassName("incoming-links-list")[0];
   incomingNode.innerHTML = "";
 

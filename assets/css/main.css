@@ -72,6 +72,10 @@ select {
   }
 }
 
+.hidden {
+  display: none !important;
+}
+
 body {
   color: black;
   background-color: antiquewhite;

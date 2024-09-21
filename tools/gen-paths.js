@@ -68,21 +68,24 @@ export function getPathsForNode(dom, titles, node) {
     const path = paths.get(pathName);
     const index = path.nodes.indexOf(node);
     if (index > 0) {
-      previous.push(createPathElement(dom, titles, path, index - 1));
+      previous.push(createPathElement(dom, titles, path, index - 1, true));
     }
     if (index < path.nodes.length - 1) {
-      next.push(createPathElement(dom, titles, path, index + 1));
+      next.push(createPathElement(dom, titles, path, index + 1, false));
     }
   });
 
   return { previous: previous.sort(), next: next.sort()};
 }
 
-function createPathElement(dom, titles, path, index) {
+function createPathElement(dom, titles, path, index, pointLeft) {
   const el = dom.createElement("a");
   const name = path.nodes[index];
   el.href = "/node/" + name + ".html";
-  el.textContent = titles.get(el.href) + " (" + path.humanReadableName + ")";
+  el.textContent = 
+  (pointLeft ? "< " : "")
+  + path.humanReadableName + " (" + titles.get(el.href) + ")"
+  + (pointLeft ? "" : " >");
   return el;
 }
 
