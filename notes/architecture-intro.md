@@ -1,4 +1,4 @@
-# Layers
+# Architecture Introduction
 
 Here are some requirements for a true hypertext system:
 

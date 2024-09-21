@@ -10,4 +10,4 @@ And it's really, really hard to understand. Not because it's complicated - in fa
 
 ## Development
 
- - [Layers](/node/layers.md)
+ - [Architecture](/node/architecture-intro.html)

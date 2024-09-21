@@ -1,1 +1,1 @@
-[{"title":"Commonplace","homeHref":"/node/commonplace.html"},"/node/hypertext-research.html","/node/layers.md"]
+[{"title":"Commonplace","homeHref":"/node/commonplace.html"},"/node/hypertext-research.html","/node/architecture-intro.html"]
