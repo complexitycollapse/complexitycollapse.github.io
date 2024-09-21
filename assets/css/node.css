@@ -18,6 +18,7 @@ h1,h2,h3,h4,h5,h6 {
 {
   .row {
     flex-direction: column;
+    gap: 1em;
   }
 
   article {
