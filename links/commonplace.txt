@@ -1,1 +1,1 @@
-[{"title":"Commonplace","homeHref":"/node/commonplace.html"},"/node/hypertext-research.html","/node/xanadu-links.html","/node/architecture-intro.html"]
+[{"title":"Commonplace","homeHref":"/node/commonplace.html"},"/node/hypertext-research.html","/node/xanadu-links.html","/node/ui-inspiration.html","/node/architecture-intro.html"]

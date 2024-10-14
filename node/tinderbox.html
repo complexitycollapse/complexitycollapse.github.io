@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html><head>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <title>Complexity Collapse | Tinderbox</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/node.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div class="row">
+      <div class="previous-paths-list"></div>
+      <article>
+        <h1 id="tinderbox">Tinderbox</h1>
+<p>Tinderbox is a visual knowledge management/note taking application inspired by things like zettelkasten and mind maps. Arguably it's a hypertext system. Either way its exactly what I want my hypertext system to do.</p>
+<h2 id="howitworks">How it works</h2>
+<h3 id="notesandattributes">Notes and Attributes</h3>
+<p>There is a notes field on the left and a text area on the right. <strong>Notes</strong> have a title, text and can contain other notes. Notes visually change if they have contents (you can see the contents in some circumstances). Notes containing other notes are known as containers.</p>
+<p>Notes <strong>link</strong> to other notes. Each note has a list of incoming and outgoing links.</p>
+<p>Note the similarity to Xanadu: there are two kinds of structure, the hierarchical structure of notes and the links between them.</p>
+<p>Notes have <strong>attributes</strong>, which allow them to act like records. Each note has a set of visible attributes, but it theoretically has every attribute in the system. Attributes are sorted into categories to make them manageable. There are system attributes, some of which are read-only. All the visual styling is done through attributes. Users can also creat their own attributes. Attributes are typed. Types are: string, number, date, colour, boolean, file, url, list, set (no duplicate list), interval.</p>
+<p>A <strong>root</strong> note is one that has no parent. Not sure whether the document itself is the root or any note at the top level is a root. I think it depends as more than just Tinderbox uses this format.</p>
+<p>Every note has a unique <strong>ID</strong>.</p>
+<h3 id="views">Views</h3>
+<p>You can choose from different <strong>views</strong>. </p>
+<ul>
+<li>The map view shows notes spacially arranged.</li>
+<li>Outline view shows the hierarchy of notes. It looks very much like a standard highlighting tool.</li>
+<li>Chart view - a tree chart of the hierarchical structure of the notes.</li>
+<li>Table view - lists notes with attributes as column headings.</li>
+<li>Hyperbolic view - a spider diagram showing links between notes, with more distant notes shrinking in size.</li>
+<li>Timeline view - displays notes on a timeline, occupying space as determined by their StartDate and EndData. Can have multiple bands, with notes assigned to bands using the TimelineBand attribute.</li>
+<li>Attribute browser view - shows notes categorised by attribute value.</li>
+<li>…more</li>
+</ul>
+<p>You can double-click on a note to change the view to what it contains. There are breadcrumbs along the top that let you know where you are.</p>
+<h3 id="prototypesandattributeinheritance">Prototypes and Attribute Inheritance</h3>
+<p>You can create <strong>prototypes</strong> which act as templates for other notes. You can change the prototype of an existing note. I think prototypes are nothing more than notes that you keep in the prototype container. (No, there's a prototype attribute you can set, but perhaps notes created in the prototypes container have that set by default). Attributes are inhereted from the prototype similarly to Javascript. However, some attributes are <strong>intrinsic</strong> meaning they are never inherited. Examples are the X and Y position, ID, Outline order. Some intrinsic attribute values on the prototype are copied to the instance (height and width) so that the initial value is the same.</p>
+<p>A note can be "reset", meaning that its local properties are wiped, restoring it to the prototype. Intrinsic properties are not wiped.</p>
+<p>Prototypes are not the only place that values are inherited from. There is a cascade: OS settings (mostly localization stuff, such as date formats), built-in app settings, config files, document settings, prototypes (to any level of inheritance), note.</p>
+<h3 id="agentsandactions">Agents and Actions</h3>
+<p><strong>Agents</strong> can be used to create dynamic notes. An agent can be given a query, and the results appear as its contents. Queries consume the attributes of the notes. The query is an attribute, of course. Agents can also have actions, which allow them to set an attribute value on anything that matches the query.</p>
+<p>The notes that appear in an agent are <strong>aliases</strong>, basically clones in the ZigZag sense. The alias can be edited as if it were the original. An alias is implemented as a note with the original as its prototype, and a special hidden attribute: alias=true.</p>
+<p><strong>Queries, actions, rules and edicts</strong> can be set on any note, icluding on a prototype. They all seem to do the same thing but run at different times. Agent actions run continually.</p>
+<p>Some more details: agent actions are performed on an alias is creates as a result of a query match; a rule is performed by a note or agent on itself every few seconds; an edict is the same but runs approximately once an hour; other actions are performed on certain events e.g. OnAdd, OnRemove, OnJoin.</p>
+<p>A <strong>stamp</strong> is a named action that is run manually on any selected nodes.</p>
+<p>Action code is written in a language that supports a wide variety of predicates, conditional statements, and sequences of actions. There is also support for regexes.</p>
+<p>Agents as just like notes but have a hidden Agent=true attribute. Aliases are stored as children of the agent, just like notes nested in notes.</p>
+<h3 id="paths">Paths</h3>
+<p><strong>Paths</strong>* are used in scripting. Paths look like file paths: /news, ../Chicago, ../.. etc. Each path designates a note. The labels are the names of the notes.</p>
+<p>Note names are not required to be unique. The first note in the outline order is used when that's so. This is a general principle used elsewhere.</p>
+<h3 id="html">HTML</h3>
+<p>You can put HTML in the text of a node. This HTML can contain variables that refer to the note's attributes, so the text can format the attribute. The HTML is therefore a bit like a template. Conditional expressions are allowed too, and no doubt all the other scripting things.</p>
+<h3 id="inspector">Inspector</h3>
+<p>This is a UI concept. The inspector is a window that gives you control over most aspects of <em>something</em>. That something is what was selected before you open it. That could be a note, an arbitrary group of notes, the document itself or Tinderbox. The are several different inspectors, each of which is only applicable to certain selection.</p>
+<p>Its basic role is to allow you to modify attributes at some level. But it provides specialised tabs for important attributes, rather than just a list. For example, there's a colours tab a document level that allows you to name colours, and has a colour wheel. Inspectors differ by which tabs they offer.</p>
+<p>The inspectors are: Tinderbox, document, properties, appearance, text, export, action. All but the first two apply to notes and selections of notes. (<a href="https://acrobatfaq.com/atbref10/index/Windows/Inspector.html).">https://acrobatfaq.com/atbref10/index/Windows/Inspector.html).</a> Note that the text inspector is not for editing the note's text, but for modifying how it's displayed (font, colour etc.)</p>
+<h3 id="adornments">Adornments</h3>
+<p>Adornments are visual containers within a container that you can place child notes in for visual purposes. The note remains a child of its parent, not the adornment. Adornments have many of the features of agents, such as queries and actions. The difference is that notes are actually relocated to the adornment (and therefore their parent becomes the container of the adornment) rather than using aliases. So adornments give you a kind of self-organization.</p>
+<p>This is interesting because adornments represent a layer of hierarchy that is both within and without the general hierarchy, demonstrating multiple meanings of "contained by". Visual layout of a hypertext document might be similar, with both visual containers and multiple containeres, and multiple paths of inheritance.</p>
+<h2 id="goodpoints">Good Points</h2>
+<ul>
+<li>Notes are visual yet abstract. Every note has many different visual representations, depending on the view used.</li>
+<li>Hierarchical notes allows any note to grow to unlimited complexity.</li>
+<li>Multiple visual views (overlays?) on the same data.</li>
+<li>Notes have two kinds of "contents", the text within them and the notes they contain.</li>
+<li>There are also two fundamental kinds of structure: hierarchical (contents) and links.</li>
+<li>Notes have different kinds of relations to other notes. For example, the spacial arrangement in the map view vs. the ordering in the outline view.</li>
+<li>Simple data model: notes, attributes, links. (More advanced: prototypes, aliases, agents).</li>
+<li>Dynamic queries (they query within the document, this can be extended in many ways).</li>
+<li>Scripting language that isn't a full language (not loops).</li>
+<li>Data format is simple and can be processed by other tools.</li>
+<li>Persistent IDs for all notes.</li>
+<li>Implicit ordering of all content via the outline view.</li>
+<li>Adornments demonstrate multiple, semi-nested forms of containment.</li>
+</ul>
+<h2 id="notsogoodpoints">Not So Good Points</h2>
+<ul>
+<li>The way agents work seems very imperative.</li>
+<li>Rules and edicts run periodically. Rather strange.</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="http://www.eastgate.com/">Homepage</a></li>
+<li><a href="https://acrobatfaq.com/atbref10/index/Syntax_Library/The_XML_TBX_format.html">File Format Reference</a></li>
+</ul>
+<h3 id="becktench">Beck Tench</h3>
+<p>Tinderbox power user.</p>
+<ul>
+<li><a href="https://www.youtube.com/@beck-tench">YouTube</a></li>
+<li><a href="https://www.becktench.com/blog">Blog</a></li>
+<li><a href="https://www.becktench.com/workflow">Workflow</a></li>
+</ul>
+<h3 id="michaelbecker">Michael Becker</h3>
+<p>Tinderbox trainer.</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=AQCp8tVRJSg&amp;list=PL6MVDtSfcKxd2XLpenMAd9H4VknDyn6oz">Mastering Tinderbox and the 5Cs of Knowledge Management</a></li>
+</ul>
+<h3 id="markanderson">Mark Anderson</h3>
+<ul>
+<li><a href="https://www.acrobatfaq.com/tb_clarify/index.html">Tutorials</a></li>
+<li><a href="https://acrobatfaq.com/atbref10/">Tinderbox Reference</a></li>
+</ul>
+        <div class="incoming">Incoming links: <span class="incoming-links-list"><a href="/node/hypertext-research.html" class="incoming">Hypertext Research</a></span></div>
+      </article>
+      <div class="next-paths-list"></div>
+    </div>
+
+</body></html>

@@ -1,1 +1,1 @@
-[{"title":"Hypertext research","homeHref":"/node/hypertext-research.html"}]
+[{"title":"Hypertext Research","homeHref":"/node/hypertext-research.html"},"/node/xanadu-links.html","/node/tinderbox.html"]
