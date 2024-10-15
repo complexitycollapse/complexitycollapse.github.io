@@ -26,7 +26,7 @@ function createIncoming(dom, href, text) {
 
 const notesFiles = fs.readdirSync("notes");
 const nodeDirs = fs.readdirSync("revisions", { withFileTypes: true }).filter(d => d.isDirectory()).map(d => d.name);
-const converter = new showdown.Converter({ simplifiedAutoLink: true });
+const converter = new showdown.Converter({ simplifiedAutoLink: true, disableForced4SpacesIndentedSublists: true });
 const template = fs.readFileSync("node-template.html", "utf8");
 
 notesFiles.forEach(filename => {
